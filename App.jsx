@@ -1,5 +1,4 @@
 import React from "react"
-import { data } from "./data.js"
 import HomePage from "./HomePage.jsx"
 import he from "he"
 import clsx from 'clsx'
