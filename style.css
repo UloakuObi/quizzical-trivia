@@ -42,3 +42,7 @@ button.check-ans {
     width: auto;
     margin-inline: auto;
 }
+
+button.selected{
+    background-color: pink;
+}
