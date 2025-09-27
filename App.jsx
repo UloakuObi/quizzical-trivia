@@ -14,8 +14,6 @@ export default function App() {
         const res = await fetch("https://opentdb.com/api.php?amount=5&category=9&difficulty=medium&type=multiple")
         const data = await res.json()
         // console.log(JSON.stringify(data, null, 2))
-        console.log("Button clicked")
-            
 
         const formattedData = data.results.map((question, index) => {
             const options = [...question.incorrect_answers]
@@ -36,9 +34,11 @@ export default function App() {
    
     const quizElements = quizData.map((question, index) => {
         return (
-            <div key={index}>
+            <div key={index} className="question">
                 <h2>{he.decode(question.question)}</h2>
-                <div>{question.options.map((option, index) => <span key={index}>{option}</span>)}</div>
+                <div className="quiz-options">
+                    {question.options.map((option, index) => <span key={index}>{option}</span>)}
+                </div>
             </div>
             )
     })
@@ -47,8 +47,8 @@ export default function App() {
 
     return (
         <main>
-            {/* <HomePage fetchQuiz={fetchQuiz}/> */}
           {startQuiz ? quizElements : <HomePage fetchQuiz={fetchQuiz}/>}
+          {startQuiz && <button className="check-ans">Check answer</button>}
         </main>
     )
 }

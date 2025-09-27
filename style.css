@@ -2,3 +2,43 @@
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100vh;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid red;
+}
+
+main {
+    margin: 2rem 5rem;
+}
+
+div.question {
+    padding-block: .25em;
+}
+
+h2 {
+    font-size: 1.125rem;
+}
+
+.quiz-options > span{
+    margin-right: .5em;
+    padding: .25em .65em;
+    border: 1px solid gray;
+    border-radius: .75rem;
+}
+
+.quiz-options {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid lightgray;
+}
+
+button.check-ans {
+    margin-top: 2rem;
+    width: auto;
+    margin-inline: auto;
+}
