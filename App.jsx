@@ -2,14 +2,17 @@ import React from "react"
 import { data } from "./data.js"
 import HomePage from "./HomePage.jsx"
 import he from "he"
+import clsx from 'clsx'
 
 export default function App() {
 
-    const [startQuiz, setStartQuiz] = React.useState(false)
+    const [screen, setScreen] = React.useState("home") 
     const [quizData, setQuizData] = React.useState([])
 
+    const score = quizData.filter(question => question.selectedAnswer === question.correct_answer).length
+
     async function fetchQuiz() {
-        setStartQuiz(!startQuiz)
+        setScreen("quiz")
 
         const res = await fetch("https://opentdb.com/api.php?amount=5&category=9&difficulty=medium&type=multiple")
         const data = await res.json()
@@ -17,7 +20,7 @@ export default function App() {
 
         const formattedData = data.results.map(question => {
             const options = [...question.incorrect_answers]
-            const randomIndex = Math.floor(Math.random() * (options + 1))
+            const randomIndex = Math.floor(Math.random() * (options.length + 1))
             options.splice(randomIndex, 0, question.correct_answer)
 
             return {
@@ -52,17 +55,58 @@ export default function App() {
             )
     })
 
-    function handleSelectAnswer(questionIndex, optionValue) {
+    function handleSelectAnswer(questionIndex, option) {
         setQuizData(prevData => (
             prevData.map((question, index) =>
-                (questionIndex===index? {...question, selectedAnswer:optionValue} : question)
+                (questionIndex===index ? {...question, selectedAnswer:option} : question)
                 )))
     }
 
+    function handleShowResults() {
+        // setShowResults(!showResults)
+        
+        setScreen("results")
+
+    }
+    
+    const resultsElement = quizData.map((question, index) => {
+        return (
+            <div key={index} className="question">
+                <h2>{he.decode(question.question)}</h2>
+                <div className="quiz-options">
+                    {question.options.map((option, index) => (
+                    <button key={index} 
+                        className={clsx(
+                            option === question.correct_answer && "green-bg",
+                            // question.selectedAnswer === question.correct_answer && "green-bg", 
+                            option === question.selectedAnswer && option !== question.correct_answer && "red-bg"
+                            
+                        )}>
+                        {he.decode(option)}
+                    </button>
+                    ))}
+                </div>
+            </div>
+            )
+
+    })
+    
+
     return (
         <main>
-          {startQuiz ? quizElements : <HomePage fetchQuiz={fetchQuiz}/>}
-          {startQuiz && <button className="check-ans">Check answer</button>}
+          {screen === "home" && <HomePage fetchQuiz={fetchQuiz}/>}
+          {screen === "quiz" && quizData.length > 0 &&
+            <>
+                {/* <p>Loading quiz…</p> */}
+                {quizElements}
+                <button className="check-ans" onClick={handleShowResults}>Check answer</button>
+            </>}
+          {screen === "results" && 
+            <>
+                {resultsElement}
+                <span>You scored {score}/{quizData.length}</span>
+                <button onClick={fetchQuiz}>Play again</button>
+            </>}
         </main>
     )
 }

@@ -21,6 +21,14 @@ div.question {
     padding-block: .25em;
 }
 
+.green-bg {
+    background-color: green;
+}
+
+.red-bg {
+    background-color: pink;
+}
+
 h2 {
     font-size: 1.125rem;
 }
@@ -46,3 +54,4 @@ button.check-ans {
 button.selected{
     background-color: #D6DBF5;
 }
+
