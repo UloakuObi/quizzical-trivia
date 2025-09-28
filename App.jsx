@@ -44,7 +44,7 @@ export default function App() {
                 <div className="quiz-options">
                     {question.options.map((option, index) => (
                     <button key={index} 
-                        className={question.selectedAnswer === option ? "selected" : undefined}
+                        className={clsx("option-btn", question.selectedAnswer === option ? "selected" : undefined)}
                         onClick={() => handleSelectAnswer(questionIndex, option)}>
                         {he.decode(option)}
                     </button>
@@ -72,13 +72,13 @@ export default function App() {
         return (
             <div key={index} className="question">
                 <h2>{he.decode(question.question)}</h2>
-                <div className="quiz-options">
+                <div className="quiz-options"> 
                     {question.options.map((option, index) => (
                     <button key={index} 
-                        className={clsx(
+                        className={clsx("option-btn",
                             option === question.correct_answer && "green-bg",
-                            // question.selectedAnswer === question.correct_answer && "green-bg", 
-                            option === question.selectedAnswer && option !== question.correct_answer && "red-bg"
+                            option === question.selectedAnswer && option !== question.correct_answer && "red-bg",
+                            option !== question.correct_answer && "faded"
                             
                         )}>
                         {he.decode(option)}
@@ -95,17 +95,19 @@ export default function App() {
         <main>
           {screen === "home" && <HomePage fetchQuiz={fetchQuiz}/>}
           {screen === "quiz" && quizData.length > 0 &&
-            <>
+            <section className="quiz-page">
                 {/* <p>Loading quiz…</p> */}
                 {quizElements}
                 <button className="check-ans" onClick={handleShowResults}>Check answer</button>
-            </>}
+            </section>}
           {screen === "results" && 
-            <>
+            <section className="quiz-page">
                 {resultsElement}
-                <span>You scored {score}/{quizData.length}</span>
-                <button onClick={fetchQuiz}>Play again</button>
-            </>}
+                <div className="resume-play">
+                    <span>You scored {score}/{quizData.length}</span>
+                    <button className="play-again" onClick={fetchQuiz}>Play again</button>
+                </div>
+            </section>}
         </main>
     )
 }
